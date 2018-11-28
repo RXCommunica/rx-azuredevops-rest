@@ -13,6 +13,11 @@ namespace RXCO.AzureDevOps.REST.Base
     /// </example>
     public struct APISemanticVersionWrapper : IComparer<APISemanticVersionWrapper>, IComparable<APISemanticVersionWrapper>
     {
+        /// <summary>
+        /// Construct new instance of APISemanticVersionWrapper.
+        /// </summary>
+        /// <param name="verMajor"></param>
+        /// <param name="verMinor"></param>
         public APISemanticVersionWrapper(int verMajor, int verMinor)
         {
             VersionMajor = verMajor;
