@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace RXCO.AzureDevOps.REST.Base
@@ -10,7 +11,7 @@ namespace RXCO.AzureDevOps.REST.Base
     /// <example><para>Comparing an exact version should be done as directly comparing the resulting toString.</para>
     /// <para>Example of same versions version "2.1" with "2.1", "2.1preview" with "2.1preview".</para>
     /// </example>
-    public sealed class APISemanticVersionWrapper : IComparer<APISemanticVersionWrapper>, IComparable<APISemanticVersionWrapper>
+    public struct APISemanticVersionWrapper : IComparer<APISemanticVersionWrapper>, IComparable<APISemanticVersionWrapper>
     {
         /// <summary>
         /// Construct new instance of APISemanticVersionWrapper.
@@ -21,6 +22,8 @@ namespace RXCO.AzureDevOps.REST.Base
         {
             VersionMajor = verMajor;
             VersionMinor = verMinor;
+            VersionPatch = 0;
+            CustomAdditionVersionString = "";
         }
 
         public APISemanticVersionWrapper(int verMajor, int verMinor, int verPatch)
@@ -28,6 +31,7 @@ namespace RXCO.AzureDevOps.REST.Base
             VersionMajor = verMajor;
             VersionMinor = verMinor;
             VersionPatch = verPatch;
+            CustomAdditionVersionString = "";
         }
 
         /// <summary>Major version part.</summary>
@@ -37,9 +41,9 @@ namespace RXCO.AzureDevOps.REST.Base
         public int VersionMinor { get; private set; }
 
         /// <summaryPatch version part.</summary>
-        public int VersionPatch { get; private set; } = 0;
+        public int VersionPatch { get; private set; }
 
-        public String CustomVersionString { get; set; }
+        public String CustomAdditionVersionString { get; set; }
 
         #region Comparison operator implementation
         public static bool operator >(APISemanticVersionWrapper versionA, APISemanticVersionWrapper versionB)
@@ -74,9 +78,9 @@ namespace RXCO.AzureDevOps.REST.Base
         {
             var result = "";
             StringBuilder sb = new StringBuilder().Append(VersionMajor).Append(".").Append(VersionMinor);
-            if (!String.IsNullOrEmpty(CustomVersionString))
+            if (!String.IsNullOrEmpty(CustomAdditionVersionString))
             {
-                sb.Append(CustomVersionString);
+                sb.Append(CustomAdditionVersionString);
             }
             result = sb.ToString();
             return result;
@@ -165,7 +169,7 @@ namespace RXCO.AzureDevOps.REST.Base
             hashCode = hashCode * -1521134295 + VersionMajor.GetHashCode();
             hashCode = hashCode * -1521134295 + VersionMinor.GetHashCode();
             hashCode = hashCode * -1521134295 + VersionPatch.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CustomVersionString);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CustomAdditionVersionString);
             return hashCode;
         }
 
